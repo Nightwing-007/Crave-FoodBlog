@@ -8,5 +8,5 @@ COPY . .
 # Build the Spring Boot application
 RUN mvn clean package -DskipTests
 
-# Run the generated .jar file
-CMD ["java", "-jar", "target/backend-0.0.1-SNAPSHOT.jar"]
+# Run the generated .jar file using a wildcard
+CMD ["sh", "-c", "java -jar target/*.jar"]
