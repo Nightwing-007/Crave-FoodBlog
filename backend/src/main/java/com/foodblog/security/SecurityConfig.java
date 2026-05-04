@@ -65,7 +65,7 @@ public class SecurityConfig {
 
         // IMPORTANT: Replace the Vercel URL below with your actual live Vercel frontend URL
         configuration.setAllowedOrigins(Arrays.asList(
-                "https://your-frontend-domain.vercel.app",
+                "https://crave-backend-vav4.onrender.com",
                 "http://localhost:5173"
         ));
 
