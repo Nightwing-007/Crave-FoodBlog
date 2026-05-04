@@ -63,15 +63,16 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // IMPORTANT: Replace the Vercel URL below with your actual live Vercel frontend URL
-        configuration.setAllowedOrigins(Arrays.asList(
-                "https://crave-backend-vav4.onrender.com",
-                "http://localhost:5173"
-        ));
+        // This allows any Vercel domain or localhost to connect without typos causing blocks
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true); // Required for some auth headers
+
+        // Explicitly allowing the Authorization header is crucial for JWTs
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+
+        // Note: We removed setAllowCredentials(true) because it conflicts with the "*" pattern
+        // and is not needed since you are storing the token in LocalStorage, not cookies.
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
