@@ -50,7 +50,7 @@ const AddRecipe = () => {
 
   return (
       <div className="max-w-4xl mx-auto pb-20">
-        <div className="bg-white dark:bg-gray-900 rounded-[3rem] shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden relative">
+        <div className="glass rounded-[3rem] overflow-hidden relative">
           {/* Header Decor */}
           <div className="bg-gray-900 dark:bg-black px-10 py-16 text-center relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">

@@ -38,7 +38,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-16 pb-20">
       {/* Profile Header */}
-      <div className="bg-white dark:bg-gray-900 rounded-[3rem] p-10 md:p-12 shadow-2xl border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+      <div className="glass rounded-[3rem] p-10 md:p-12 relative overflow-hidden transition-colors duration-300">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-orange-50 dark:bg-orange-900/10 rounded-full blur-3xl opacity-50"></div>
         
         <div className="relative flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-10 text-center md:text-left">

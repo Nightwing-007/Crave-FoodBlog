@@ -84,23 +84,23 @@ const AdminDashboard = () => {
       </div>
       
       {/* Tab Switcher */}
-      <div className="flex bg-gray-100 dark:bg-gray-800 p-1.5 rounded-2xl">
-        <button 
-          onClick={() => setActiveTab('recipes')}
-          className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 ${activeTab === 'recipes' ? 'bg-white dark:bg-gray-700 text-orange-600 dark:text-orange-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
-        >
-          Recipes
-        </button>
-        <button 
-          onClick={() => setActiveTab('users')}
-          className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 ${activeTab === 'users' ? 'bg-white dark:bg-gray-700 text-orange-600 dark:text-orange-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
-        >
-          Users
-        </button>
+      <div className="flex glass p-1.5 rounded-2xl">
+          <button 
+            onClick={() => setActiveTab('recipes')}
+            className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === 'recipes' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
+          >
+            Recipes
+          </button>
+          <button 
+            onClick={() => setActiveTab('users')}
+            className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === 'users' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
+          >
+            Users
+          </button>
       </div>
 
       <div className="flex items-center space-x-4">
-        <div className="bg-white dark:bg-gray-900 px-6 py-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+        <div className="glass px-6 py-3 rounded-2xl">
           <span className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest block">
             {activeTab === 'recipes' ? 'Total Recipes' : 'Total Users'}
           </span>
@@ -111,7 +111,7 @@ const AdminDashboard = () => {
       </div>
     </div>
 
-    <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+    <div className="glass rounded-[2.5rem] overflow-hidden">
       <div className="overflow-x-auto">
         {activeTab === 'recipes' ? (
           <table className="w-full text-left border-collapse">

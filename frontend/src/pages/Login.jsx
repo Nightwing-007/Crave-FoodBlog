@@ -22,7 +22,7 @@ const Login = () => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-900 p-10 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-gray-800 relative overflow-hidden transition-colors duration-300">
+      <div className="glass max-w-md w-full space-y-8 p-10 rounded-[2.5rem] relative overflow-hidden transition-colors duration-300">
         {/* Decorative background element */}
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-orange-100 dark:bg-orange-900/20 rounded-full blur-3xl opacity-50"></div>
         <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-orange-50 dark:bg-orange-950/20 rounded-full blur-3xl opacity-50"></div>

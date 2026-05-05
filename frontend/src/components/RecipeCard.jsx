@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const RecipeCard = ({ recipe }) => {
   return (
-      <div className="group bg-white dark:bg-gray-900 rounded-[2rem] overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:shadow-orange-100 dark:hover:shadow-orange-900/20 transition-all duration-500 hover:-translate-y-2">
+      <div className="glass group rounded-[2rem] overflow-hidden hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-2">
         {/* Image Container */}
         <div className="relative h-64 overflow-hidden">
           <img

@@ -55,7 +55,7 @@ const RecipeDetails = () => {
   if (!recipe) return null;
 
   return (
-    <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-xl overflow-hidden transition-colors duration-300">
+    <div className="max-w-4xl mx-auto glass rounded-3xl overflow-hidden transition-colors duration-300">
       <img src={recipe.imageUrl} alt={recipe.title} className="w-full h-96 object-cover" />
       <div className="p-8">
         <div className="flex justify-between items-start mb-6">

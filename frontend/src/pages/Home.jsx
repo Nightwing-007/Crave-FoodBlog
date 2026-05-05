@@ -60,26 +60,26 @@ const Home = () => {
   return (
       <div className="space-y-12 pb-20">
         {/* Hero Section */}
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gray-900 px-8 py-20 md:py-28 text-center text-white shadow-2xl">
+      <div className="glass relative overflow-hidden rounded-[2.5rem] px-8 py-20 md:py-28 text-center shadow-2xl">
           {/* Background Decoration */}
-          <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-orange-500 rounded-full blur-[120px]"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-orange-600 rounded-full blur-[120px]"></div>
+          <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none">
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-orange-500 rounded-full blur-[120px] opacity-20"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-orange-600 rounded-full blur-[120px] opacity-20"></div>
           </div>
 
           <div className="relative z-10 max-w-3xl mx-auto">
-          <span className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-widest uppercase bg-orange-500 rounded-full">
+          <span className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-widest uppercase bg-orange-500 text-white rounded-full shadow-lg shadow-orange-500/20">
             The Foodie Community
           </span>
-            <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight">
+            <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight text-gray-900 dark:text-white">
               Cook. Share. <span className="text-orange-500 text-glow">Repeat.</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-10 leading-relaxed font-medium">
               Discover thousands of hand-picked recipes from home chefs around the world. Your next masterpiece starts here.
             </p>
 
             <div className="relative group max-w-2xl mx-auto">
-              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl blur opacity-25 group-focus-within:opacity-50 transition duration-300"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl blur opacity-20 group-focus-within:opacity-40 transition duration-300"></div>
               <div className="relative flex items-center">
                 <div className="absolute left-5 text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,7 +89,7 @@ const Home = () => {
                 <input
                     type="text"
                     placeholder="What would you like to cook today?"
-                    className="w-full pl-14 pr-6 py-5 rounded-2xl text-gray-900 bg-white border-none shadow-xl focus:ring-0 text-lg font-medium placeholder:text-gray-400"
+                    className="w-full pl-14 pr-6 py-5 rounded-2xl text-gray-900 dark:text-white bg-white/50 dark:bg-gray-800/50 backdrop-blur-md border border-white/20 dark:border-gray-700/30 shadow-xl focus:ring-2 focus:ring-orange-500/50 outline-none text-lg font-medium placeholder:text-gray-400 transition-all"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
@@ -119,8 +119,8 @@ const Home = () => {
                   <button
                       key={cat}
                       onClick={() => setCategory(cat)}
-                      className={`px-6 py-2 rounded-xl font-bold text-sm transition-all duration-200 whitespace-nowrap ${
-                          category === cat ? 'bg-orange-500 text-white shadow-lg shadow-orange-100' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700'
+                      className={`px-6 py-2 rounded-xl font-bold text-sm transition-all duration-300 whitespace-nowrap shadow-sm hover:scale-105 ${
+                          category === cat ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30' : 'glass text-gray-600 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800/50'
                       }`}
                   >
                     {cat}
