@@ -55,21 +55,21 @@ const RecipeDetails = () => {
   if (!recipe) return null;
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+    <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-xl overflow-hidden transition-colors duration-300">
       <img src={recipe.imageUrl} alt={recipe.title} className="w-full h-96 object-cover" />
       <div className="p-8">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <span className="text-sm font-bold uppercase px-3 py-1 bg-orange-100 text-orange-600 rounded-full">
+            <span className="text-sm font-bold uppercase px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
               {recipe.category}
             </span>
-            <h1 className="text-4xl font-extrabold text-gray-800 mt-4">{recipe.title}</h1>
-            <p className="text-gray-500 mt-2">Created by <span className="font-semibold text-gray-700">{recipe.creatorName}</span> • {new Date(recipe.createdAt).toLocaleDateString()}</p>
+            <h1 className="text-4xl font-extrabold text-gray-800 dark:text-white mt-4">{recipe.title}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">Created by <span className="font-semibold text-gray-700 dark:text-gray-200">{recipe.creatorName}</span> • {new Date(recipe.createdAt).toLocaleDateString()}</p>
           </div>
           <div className="flex space-x-2">
             <button
               onClick={handleFavorite}
-              className="bg-pink-50 text-pink-600 p-3 rounded-xl hover:bg-pink-100 transition duration-200"
+              className="bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 p-3 rounded-xl hover:bg-pink-100 dark:hover:bg-pink-900/40 transition duration-200"
               title="Add to Favorites"
             >
               ❤️
@@ -77,7 +77,7 @@ const RecipeDetails = () => {
             {(user && (user.id === recipe.creatorId || user.role === 'ADMIN')) && (
               <button
                 onClick={handleDelete}
-                className="bg-red-50 text-red-600 p-3 rounded-xl hover:bg-red-100 transition duration-200"
+                className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition duration-200"
                 title="Delete Recipe"
               >
                 🗑️
@@ -86,29 +86,29 @@ const RecipeDetails = () => {
           </div>
         </div>
 
-        <div className="flex space-x-8 mb-8 pb-8 border-b border-gray-100">
+        <div className="flex space-x-8 mb-8 pb-8 border-b border-gray-100 dark:border-gray-800">
           <div className="flex items-center space-x-2">
             <span className="text-2xl">⏱️</span>
             <div>
-              <p className="text-xs text-gray-500 uppercase font-bold">Cooking Time</p>
-              <p className="font-bold text-gray-800">{recipe.cookingTime} mins</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">Cooking Time</p>
+              <p className="font-bold text-gray-800 dark:text-gray-200">{recipe.cookingTime} mins</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-2xl">🥗</span>
             <div>
-              <p className="text-xs text-gray-500 uppercase font-bold">Ingredients</p>
-              <p className="font-bold text-gray-800">{recipe.ingredients.length} items</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">Ingredients</p>
+              <p className="font-bold text-gray-800 dark:text-gray-200">{recipe.ingredients.length} items</p>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="md:col-span-1">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Ingredients</h3>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h3>
             <ul className="space-y-3">
               {recipe.ingredients.map((ing, index) => (
-                <li key={index} className="flex items-center space-x-3 text-gray-700">
+                <li key={index} className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
                   <span className="h-2 w-2 bg-orange-500 rounded-full"></span>
                   <span>{ing}</span>
                 </li>
@@ -116,8 +116,8 @@ const RecipeDetails = () => {
             </ul>
           </div>
           <div className="md:col-span-2">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Instructions</h3>
-            <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h3>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
               {recipe.instructions}
             </p>
           </div>

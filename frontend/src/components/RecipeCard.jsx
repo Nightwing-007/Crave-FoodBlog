@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const RecipeCard = ({ recipe }) => {
   return (
-      <div className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-orange-100 transition-all duration-500 hover:-translate-y-2">
+      <div className="group bg-white dark:bg-gray-900 rounded-[2rem] overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:shadow-orange-100 dark:hover:shadow-orange-900/20 transition-all duration-500 hover:-translate-y-2">
         {/* Image Container */}
         <div className="relative h-64 overflow-hidden">
           <img
@@ -15,7 +15,7 @@ const RecipeCard = ({ recipe }) => {
 
           {/* Category Badge */}
           <div className="absolute top-5 left-5">
-          <span className="backdrop-blur-md bg-white/90 text-gray-900 text-xs font-black uppercase px-4 py-2 rounded-xl shadow-sm">
+          <span className="backdrop-blur-md bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-white text-xs font-black uppercase px-4 py-2 rounded-xl shadow-sm">
             {recipe.category}
           </span>
           </div>
@@ -33,24 +33,24 @@ const RecipeCard = ({ recipe }) => {
 
         {/* Content */}
         <div className="p-8">
-          <h3 className="text-2xl font-black text-gray-900 mb-3 line-clamp-1 group-hover:text-orange-500 transition-colors">
+          <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-3 line-clamp-1 group-hover:text-orange-500 transition-colors">
             {recipe.title}
           </h3>
-          <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-6 font-medium">
+          <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-6 font-medium">
             {recipe.instructions}
           </p>
 
-          <div className="pt-6 border-t border-gray-50 flex items-center justify-between">
+          <div className="pt-6 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-xs">
+              <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 font-bold text-xs">
                 {recipe.creatorName?.charAt(0) || 'U'}
               </div>
-              <span className="text-xs font-bold text-gray-400">By {recipe.creatorName}</span>
+              <span className="text-xs font-bold text-gray-400 dark:text-gray-500">By {recipe.creatorName}</span>
             </div>
 
             <Link
                 to={`/recipes/${recipe.id}`}
-                className="flex items-center text-gray-900 font-black text-sm group/btn"
+                className="flex items-center text-gray-900 dark:text-gray-200 font-black text-sm group/btn"
             >
               View
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transform group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">

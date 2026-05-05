@@ -102,14 +102,14 @@ const Home = () => {
         <section className="container mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4 px-2">
             <div>
-              <h2 className="text-3xl font-black text-gray-900 tracking-tight">
+              <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">
                 {search || category !== 'All' ? (
                     <span>Found <span className="text-orange-500">{recipes.length}</span> results {search && `for "${search}"`} {category !== 'All' && `in ${category}`}</span>
                 ) : (
                     "Featured Recipes"
                 )}
               </h2>
-              <p className="text-gray-500 font-medium mt-1">
+              <p className="text-gray-500 dark:text-gray-400 font-medium mt-1">
                 Hand-picked selections for your daily meals
               </p>
             </div>
@@ -120,7 +120,7 @@ const Home = () => {
                       key={cat}
                       onClick={() => setCategory(cat)}
                       className={`px-6 py-2 rounded-xl font-bold text-sm transition-all duration-200 whitespace-nowrap ${
-                          category === cat ? 'bg-orange-500 text-white shadow-lg shadow-orange-100' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100'
+                          category === cat ? 'bg-orange-500 text-white shadow-lg shadow-orange-100' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-100 dark:border-gray-700'
                       }`}
                   >
                     {cat}
@@ -160,14 +160,14 @@ const Home = () => {
                       )}
                     </>
                 ) : (
-                    <div className="text-center py-24 bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
-                      <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="text-center py-24 bg-gray-50 dark:bg-gray-900 rounded-[3rem] border-2 border-dashed border-gray-200 dark:border-gray-800">
+                      <div className="bg-white dark:bg-gray-800 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
-                      <h3 className="text-2xl font-bold text-gray-800">No recipes found</h3>
-                      <p className="text-gray-500 mt-2 max-w-xs mx-auto font-medium">
+                      <h3 className="text-2xl font-bold text-gray-800 dark:text-white">No recipes found</h3>
+                      <p className="text-gray-500 dark:text-gray-400 mt-2 max-w-xs mx-auto font-medium">
                         We couldn't find anything matching your search. Try different keywords!
                       </p>
                       <button

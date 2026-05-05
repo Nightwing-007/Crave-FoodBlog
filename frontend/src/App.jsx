@@ -10,39 +10,42 @@ import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import { Toaster } from 'react-hot-toast';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50/50">
-      <Navbar />
-      <main className="container mx-auto px-4 md:px-6 py-10">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/recipes/:id" element={<RecipeDetails />} />
-          
-          <Route path="/add-recipe" element={
-            <ProtectedRoute>
-              <AddRecipe />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
+    <ThemeProvider>
+      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
+        <Navbar />
+        <main className="container mx-auto px-4 md:px-6 py-10">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/recipes/:id" element={<RecipeDetails />} />
+            
+            <Route path="/add-recipe" element={
+              <ProtectedRoute>
+                <AddRecipe />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
 
-          <Route path="/admin" element={
-            <ProtectedRoute adminOnly={true}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          } />
-        </Routes>
-      </main>
-      <Toaster position="bottom-right" />
-    </div>
+            <Route path="/admin" element={
+              <ProtectedRoute adminOnly={true}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </main>
+        <Toaster position="bottom-right" />
+      </div>
+    </ThemeProvider>
   );
 }
 
