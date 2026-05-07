@@ -31,8 +31,8 @@ public class Recipe {
     private String category; // Breakfast, Lunch, Dinner, Dessert, Snack
 
     @Builder.Default
-    @Column(name = "image_url")
-    private String imageUrl = "https://via.placeholder.com/150";
+    @Column(length = 1000)
+    private String imageUrl;
 
     @Column(name = "cooking_time")
     private Integer cookingTime;
