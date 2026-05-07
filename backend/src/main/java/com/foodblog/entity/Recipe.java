@@ -30,7 +30,6 @@ public class Recipe {
     @Column(nullable = false)
     private String category; // Breakfast, Lunch, Dinner, Dessert, Snack
 
-    @Builder.Default
     @Column(length = 1000)
     private String imageUrl;
 
