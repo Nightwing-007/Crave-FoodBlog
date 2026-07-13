@@ -222,7 +222,7 @@ const AddRecipe = () => {
 
             <button
                 type="submit"
-                className="w-full bg-gray-900 dark:bg-white dark:text-gray-900 text-xl font-black py-6 rounded-[2rem] hover:bg-orange-500 dark:hover:bg-orange-400 transition-all duration-300 shadow-2xl hover:shadow-orange-200 dark:hover:shadow-orange-900/20 transform hover:-translate-y-1 active:scale-95"
+                className="w-full bg-gray-900 dark:bg-white dark:text-gray-900 text-white text-xl font-black py-6 rounded-[2rem] hover:bg-orange-500 dark:hover:bg-orange-400 transition-all duration-300 shadow-2xl hover:shadow-orange-200 dark:hover:shadow-orange-900/20 transform hover:-translate-y-1 active:scale-95"
             >
               Publish Recipe
             </button>

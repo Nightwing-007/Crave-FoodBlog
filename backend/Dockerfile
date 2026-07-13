@@ -1,12 +1,16 @@
-# Use an official Maven image with Java 17 to build and run the app
-FROM maven:3.9-eclipse-temurin-17
+# Stage 1: Build the application
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
-
-# Copy your backend code into the container
 COPY . .
-
-# Build the Spring Boot application
 RUN mvn clean package -DskipTests
 
-# Run the generated .jar file using a wildcard
-CMD ["sh", "-c", "java -jar target/*.jar"]
+# Stage 2: Run with a lightweight JRE image
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
+# Set production profile for deployed environments
+ENV SPRING_PROFILES_ACTIVE=prod
+
+EXPOSE 8080
+CMD ["java", "-jar", "app.jar"]
