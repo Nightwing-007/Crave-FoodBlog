@@ -2,15 +2,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 const AddRecipe = () => {
   const [formData, setFormData] = useState({
     title: '',
     instructions: '',
     category: 'Lunch',
+    difficulty: 'EASY',
     imageUrl: '',
     cookingTime: 30,
     ingredients: [''],
+    tags: [''],
   });
   const navigate = useNavigate();
 
@@ -29,18 +33,34 @@ const AddRecipe = () => {
     setFormData({ ...formData, ingredients: newIngredients });
   };
 
+  const handleTagChange = (index, value) => {
+    const newTags = [...formData.tags];
+    newTags[index] = value;
+    setFormData({ ...formData, tags: newTags });
+  };
+
+  const addTag = () => {
+    setFormData({ ...formData, tags: [...formData.tags, ''] });
+  };
+
+  const removeTag = (index) => {
+    const newTags = formData.tags.filter((_, i) => i !== index);
+    setFormData({ ...formData, tags: newTags });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Clean ingredients to prevent empty strings in database
+      // Clean ingredients and tags to prevent empty strings in database
       const cleanIngredients = formData.ingredients.filter(ing => ing.trim() !== '');
+      const cleanTags = formData.tags.filter(tag => tag.trim() !== '');
 
       if (cleanIngredients.length === 0) {
         toast.error('Please add at least one ingredient');
         return;
       }
 
-      await api.post('/recipes', { ...formData, ingredients: cleanIngredients });
+      await api.post('/recipes', { ...formData, ingredients: cleanIngredients, tags: cleanTags });
       toast.success('Recipe created successfully!');
       navigate('/');
     } catch (error) {
@@ -89,7 +109,7 @@ const AddRecipe = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div>
                     <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2 ml-1">Category</label>
                     <select
@@ -102,6 +122,18 @@ const AddRecipe = () => {
                       <option className="dark:bg-gray-900">Dinner</option>
                       <option className="dark:bg-gray-900">Dessert</option>
                       <option className="dark:bg-gray-900">Snack</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2 ml-1">Difficulty</label>
+                    <select
+                        className="block w-full px-6 py-4 border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 rounded-2xl text-gray-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all appearance-none"
+                        value={formData.difficulty}
+                        onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
+                    >
+                      <option value="EASY" className="dark:bg-gray-900">Easy</option>
+                      <option value="MEDIUM" className="dark:bg-gray-900">Medium</option>
+                      <option value="HARD" className="dark:bg-gray-900">Hard</option>
                     </select>
                   </div>
                   <div>
@@ -200,6 +232,58 @@ const AddRecipe = () => {
 
             <hr className="border-gray-100 dark:border-gray-800" />
 
+            {/* Tags Section */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center text-orange-600 dark:text-orange-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-black text-gray-900 dark:text-white">Tags</h3>
+                </div>
+                <button
+                    type="button"
+                    onClick={addTag}
+                    disabled={formData.tags[formData.tags.length - 1]?.trim() === ''}
+                    className="disabled:opacity-50 disabled:cursor-not-allowed bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 px-6 py-2.5 rounded-xl font-bold hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors flex items-center"
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add Tag
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {formData.tags.map((tag, index) => (
+                    <div key={`tag-${index}`} className="flex space-x-2 group">
+                      <input
+                          type="text"
+                          className="flex-1 px-4 py-3 border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 rounded-xl text-gray-900 dark:text-white font-medium placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
+                          placeholder="e.g. Vegan"
+                          value={tag}
+                          onChange={(e) => handleTagChange(index, e.target.value)}
+                      />
+                      {formData.tags.length > 1 && (
+                          <button
+                              type="button"
+                              onClick={() => removeTag(index)}
+                              className="bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 p-3 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                      )}
+                    </div>
+                ))}
+              </div>
+            </div>
+
+            <hr className="border-gray-100 dark:border-gray-800" />
+
             {/* Instructions Section */}
             <div className="space-y-6">
               <div className="flex items-center space-x-4 mb-2">
@@ -211,13 +295,15 @@ const AddRecipe = () => {
                 <h3 className="text-2xl font-black text-gray-900 dark:text-white">Cooking Steps</h3>
               </div>
 
-              <textarea
-                  required
-                  className="block w-full px-6 py-6 border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 rounded-[2rem] text-gray-900 dark:text-white font-medium placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all h-64 resize-none"
-                  placeholder="Describe how to prepare this dish, step by step..."
+              <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
+                <ReactQuill
+                  theme="snow"
                   value={formData.instructions}
-                  onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
-              ></textarea>
+                  onChange={(content) => setFormData({ ...formData, instructions: content })}
+                  className="h-64 dark:text-white"
+                  placeholder="Describe how to prepare this dish, step by step..."
+                />
+              </div>
             </div>
 
             <button

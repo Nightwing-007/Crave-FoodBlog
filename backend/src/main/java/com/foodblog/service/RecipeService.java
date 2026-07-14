@@ -14,7 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
-
+import com.foodblog.entity.Difficulty;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 @Service
 public class RecipeService {
 
@@ -24,22 +26,14 @@ public class RecipeService {
     @Autowired
     private UserRepository userRepository;
 
-    public Page<RecipeDto> getAllRecipes(String search, String category, int page, int size) {
+    public Page<RecipeDto> getAllRecipes(String search, String category, Difficulty difficulty, String tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Recipe> recipes;
         
-        boolean hasSearch = search != null && !search.isEmpty();
-        boolean hasCategory = category != null && !category.isEmpty() && !category.equalsIgnoreCase("All");
+        String finalCategory = (category != null && !category.isEmpty() && !category.equalsIgnoreCase("All")) ? category : null;
+        String finalSearch = (search != null && !search.isEmpty()) ? search : null;
+        String finalTag = (tag != null && !tag.isEmpty()) ? tag : null;
 
-        if (hasSearch && hasCategory) {
-            recipes = recipeRepository.findByCategoryIgnoreCaseAndTitleContainingIgnoreCase(category, search, pageable);
-        } else if (hasSearch) {
-            recipes = recipeRepository.findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(search, search, pageable);
-        } else if (hasCategory) {
-            recipes = recipeRepository.findByCategoryIgnoreCase(category, pageable);
-        } else {
-            recipes = recipeRepository.findAll(pageable);
-        }
+        Page<Recipe> recipes = recipeRepository.findRecipesWithFilters(finalSearch, finalCategory, difficulty, finalTag, pageable);
         return recipes.map(this::mapToDto);
     }
 
@@ -55,11 +49,17 @@ public class RecipeService {
 
         Recipe recipe = new Recipe();
         recipe.setTitle(recipeDto.getTitle());
-        recipe.setInstructions(recipeDto.getInstructions());
+        // Sanitize incoming HTML instructions
+        String safeInstructions = Jsoup.clean(recipeDto.getInstructions(), Safelist.relaxed());
+        recipe.setInstructions(safeInstructions);
         recipe.setCategory(recipeDto.getCategory());
         recipe.setImageUrl(recipeDto.getImageUrl() != null ? recipeDto.getImageUrl() : "https://via.placeholder.com/150");
         recipe.setCookingTime(recipeDto.getCookingTime());
         recipe.setIngredients(recipeDto.getIngredients());
+        if (recipeDto.getDifficulty() != null) {
+            recipe.setDifficulty(Difficulty.valueOf(recipeDto.getDifficulty()));
+        }
+        recipe.setTags(recipeDto.getTags());
         recipe.setCreator(user);
 
         Recipe savedRecipe = recipeRepository.save(recipe);
@@ -92,6 +92,8 @@ public class RecipeService {
                 .creatorId(recipe.getCreator().getId())
                 .creatorName(recipe.getCreator().getName())
                 .ingredients(recipe.getIngredients())
+                .difficulty(recipe.getDifficulty() != null ? recipe.getDifficulty().name() : null)
+                .tags(recipe.getTags())
                 .build();
     }
 }

@@ -48,4 +48,13 @@ public class Recipe {
     @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
     @Column(name = "ingredient")
     private List<String> ingredients = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private Difficulty difficulty;
+
+    @ElementCollection
+    @CollectionTable(name = "recipe_tags", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "tag")
+    private List<String> tags = new ArrayList<>();
 }

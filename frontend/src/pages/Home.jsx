@@ -6,6 +6,8 @@ const Home = () => {
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
+  const [difficulty, setDifficulty] = useState('');
+  const [tag, setTag] = useState('');
   const [loading, setLoading] = useState(true);
 
   // Pagination states
@@ -21,6 +23,12 @@ const Home = () => {
 
       if (category !== 'All') {
         url += `&category=${category}`;
+      }
+      if (difficulty) {
+        url += `&difficulty=${difficulty}`;
+      }
+      if (tag) {
+        url += `&tag=${tag}`;
       }
 
       const response = await api.get(url);
@@ -40,7 +48,7 @@ const Home = () => {
     }
   };
 
-  // Trigger fresh search when typing or changing category
+    // Trigger fresh search when typing or changing category, difficulty, tag
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       setPage(0);
@@ -48,7 +56,7 @@ const Home = () => {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [search, category]);
+  }, [search, category, difficulty, tag]);
 
   // Trigger load more when page state increases
   useEffect(() => {
@@ -114,7 +122,7 @@ const Home = () => {
               </p>
             </div>
 
-            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar w-full md:w-auto">
               {['All', 'Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack'].map((cat) => (
                   <button
                       key={cat}
@@ -127,6 +135,44 @@ const Home = () => {
                   </button>
               ))}
             </div>
+          </div>
+          
+          {/* Advanced Filters */}
+          <div className="flex flex-col md:flex-row gap-4 mb-10 px-2">
+            <div className="relative group flex-1">
+              <select
+                  value={difficulty}
+                  onChange={(e) => setDifficulty(e.target.value)}
+                  className="w-full px-5 py-3 rounded-xl text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-orange-500/50 outline-none text-sm font-medium transition-all appearance-none"
+              >
+                <option value="">Any Difficulty</option>
+                <option value="EASY">Easy</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HARD">Hard</option>
+              </select>
+            </div>
+            
+            <div className="relative group flex-1">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                #
+              </div>
+              <input
+                  type="text"
+                  placeholder="Filter by tag (e.g. Vegan)"
+                  className="w-full pl-10 pr-5 py-3 rounded-xl text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-orange-500/50 outline-none text-sm font-medium placeholder:text-gray-400 transition-all"
+                  value={tag}
+                  onChange={(e) => setTag(e.target.value)}
+              />
+            </div>
+            
+            {(difficulty || tag) && (
+              <button
+                onClick={() => { setDifficulty(''); setTag(''); }}
+                className="px-5 py-3 text-sm font-bold text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-xl transition-colors whitespace-nowrap"
+              >
+                Clear Filters
+              </button>
+            )}
           </div>
 
           {loading ? (

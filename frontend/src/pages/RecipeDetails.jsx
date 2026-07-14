@@ -60,9 +60,19 @@ const RecipeDetails = () => {
       <div className="p-8">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <span className="text-sm font-bold uppercase px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
-              {recipe.category}
-            </span>
+            <div className="flex items-center space-x-3">
+              <span className="text-sm font-bold uppercase px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full">
+                {recipe.category}
+              </span>
+              {recipe.difficulty && (
+                <span className={`text-sm font-bold uppercase px-3 py-1 rounded-full text-white ${
+                  recipe.difficulty === 'EASY' ? 'bg-green-500/90' : 
+                  recipe.difficulty === 'MEDIUM' ? 'bg-yellow-500/90' : 'bg-red-500/90'
+                }`}>
+                  {recipe.difficulty}
+                </span>
+              )}
+            </div>
             <h1 className="text-4xl font-extrabold text-gray-800 dark:text-white mt-4">{recipe.title}</h1>
             <p className="text-gray-500 dark:text-gray-400 mt-2">Created by <span className="font-semibold text-gray-700 dark:text-gray-200">{recipe.creatorName}</span> • {new Date(recipe.createdAt).toLocaleDateString()}</p>
           </div>
@@ -103,6 +113,19 @@ const RecipeDetails = () => {
           </div>
         </div>
 
+        {recipe.tags && recipe.tags.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3">Tags</h3>
+            <div className="flex flex-wrap gap-2">
+              {recipe.tags.map((tag, index) => (
+                <span key={index} className="text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-xl">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="md:col-span-1">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Ingredients</h3>
@@ -117,9 +140,10 @@ const RecipeDetails = () => {
           </div>
           <div className="md:col-span-2">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Instructions</h3>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-              {recipe.instructions}
-            </p>
+            <div 
+              className="prose prose-orange dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: recipe.instructions }}
+            />
           </div>
         </div>
       </div>

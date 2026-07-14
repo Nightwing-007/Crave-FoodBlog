@@ -13,11 +13,19 @@ const RecipeCard = ({ recipe }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-          {/* Category Badge */}
-          <div className="absolute top-5 left-5">
-          <span className="backdrop-blur-md bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-white text-xs font-black uppercase px-4 py-2 rounded-xl shadow-sm">
-            {recipe.category}
-          </span>
+          {/* Badges */}
+          <div className="absolute top-5 left-5 flex flex-col space-y-2">
+            <span className="backdrop-blur-md bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-white text-xs font-black uppercase px-4 py-2 rounded-xl shadow-sm w-max">
+              {recipe.category}
+            </span>
+            {recipe.difficulty && (
+              <span className={`backdrop-blur-md text-xs font-black uppercase px-4 py-2 rounded-xl shadow-sm w-max text-white ${
+                recipe.difficulty === 'EASY' ? 'bg-green-500/90' : 
+                recipe.difficulty === 'MEDIUM' ? 'bg-yellow-500/90' : 'bg-red-500/90'
+              }`}>
+                {recipe.difficulty}
+              </span>
+            )}
           </div>
 
           {/* Quick Info */}
@@ -36,9 +44,22 @@ const RecipeCard = ({ recipe }) => {
           <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-3 line-clamp-1 group-hover:text-orange-500 transition-colors">
             {recipe.title}
           </h3>
-          <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-6 font-medium">
-            {recipe.instructions}
+          <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-4 font-medium">
+            {recipe.instructions ? recipe.instructions.replace(/<[^>]+>/g, '') : ''}
           </p>
+
+          {recipe.tags && recipe.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {recipe.tags.slice(0, 3).map((tag, index) => (
+                <span key={index} className="text-xs font-bold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-lg">
+                  #{tag}
+                </span>
+              ))}
+              {recipe.tags.length > 3 && (
+                <span className="text-xs font-bold text-gray-400">+{recipe.tags.length - 3}</span>
+              )}
+            </div>
+          )}
 
           <div className="pt-6 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
             <div className="flex items-center space-x-3">

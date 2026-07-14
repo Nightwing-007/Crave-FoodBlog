@@ -21,10 +21,12 @@ public class RecipeController {
     public ResponseEntity<Page<RecipeDto>> getAllRecipes(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) com.foodblog.entity.Difficulty difficulty,
+            @RequestParam(required = false) String tag,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ResponseEntity.ok(recipeService.getAllRecipes(search, category, page, size));
+        return ResponseEntity.ok(recipeService.getAllRecipes(search, category, difficulty, tag, page, size));
     }
 
     @GetMapping("/{id}")

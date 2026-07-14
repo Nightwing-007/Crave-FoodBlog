@@ -23,4 +23,6 @@ public class RecipeDto {
     private String creatorName;
     private List<String> ingredients;
     private int favoriteCount;
+    private String difficulty;
+    private List<String> tags;
 }
