@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 import com.foodblog.entity.Difficulty;
@@ -26,6 +27,7 @@ public class RecipeService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public Page<RecipeDto> getAllRecipes(String search, String category, Difficulty difficulty, String tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         
@@ -37,6 +39,7 @@ public class RecipeService {
         return recipes.map(this::mapToDto);
     }
 
+    @Transactional(readOnly = true)
     public RecipeDto getRecipeById(Long id) {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe not found with id: " + id));
