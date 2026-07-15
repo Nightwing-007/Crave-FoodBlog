@@ -57,4 +57,7 @@ public class Recipe {
     @CollectionTable(name = "recipe_tags", joinColumns = @JoinColumn(name = "recipe_id"))
     @Column(name = "tag")
     private List<String> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 }

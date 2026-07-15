@@ -30,12 +30,20 @@ const RecipeCard = ({ recipe }) => {
 
           {/* Quick Info */}
           <div className="absolute bottom-5 left-5 right-5 flex justify-between items-center transform translate-y-10 group-hover:translate-y-0 transition-transform duration-500">
-          <span className="flex items-center text-white text-sm font-bold">
+          <span className="flex items-center text-white text-sm font-bold bg-black/40 px-2 py-1 rounded-md backdrop-blur-md">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             {recipe.cookingTime} min
           </span>
+          {recipe.averageRating > 0 && (
+            <span className="flex items-center text-white text-sm font-bold bg-black/40 px-2 py-1 rounded-md backdrop-blur-md">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#f59e0b" className="w-4 h-4 mr-1">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              {recipe.averageRating.toFixed(1)} ({recipe.reviewCount})
+            </span>
+          )}
           </div>
         </div>
 
@@ -62,12 +70,12 @@ const RecipeCard = ({ recipe }) => {
           )}
 
           <div className="pt-6 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <Link to={`/users/${recipe.creatorId}`} className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 font-bold text-xs">
                 {recipe.creatorName?.charAt(0) || 'U'}
               </div>
-              <span className="text-xs font-bold text-gray-400 dark:text-gray-500">By {recipe.creatorName}</span>
-            </div>
+              <span className="text-xs font-bold text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">By {recipe.creatorName}</span>
+            </Link>
 
             <Link
                 to={`/recipes/${recipe.id}`}

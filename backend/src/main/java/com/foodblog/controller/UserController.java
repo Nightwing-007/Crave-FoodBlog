@@ -23,4 +23,14 @@ public class UserController {
     public ResponseEntity<String> toggleFavorite(@PathVariable Long recipeId) {
         return ResponseEntity.ok(userService.toggleFavorite(recipeId));
     }
+
+    @PostMapping("/{userId}/follow")
+    public ResponseEntity<String> toggleFollow(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.toggleFollow(userId));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserProfile(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserProfileById(userId));
+    }
 }

@@ -73,6 +73,35 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public String toggleFollow(Long targetUserId) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByEmail(email).get();
+
+        if (currentUser.getId().equals(targetUserId)) {
+            throw new RuntimeException("You cannot follow yourself");
+        }
+
+        User targetUser = userRepository.findById(targetUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if (currentUser.getFollowing().contains(targetUser)) {
+            currentUser.getFollowing().remove(targetUser);
+            userRepository.save(currentUser);
+            return "Unfollowed user";
+        } else {
+            currentUser.getFollowing().add(targetUser);
+            userRepository.save(currentUser);
+            return "Followed user";
+        }
+    }
+
+    public UserDto getUserProfileById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return mapToDto(user);
+    }
+
     private UserDto mapToDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
@@ -83,6 +112,21 @@ public class UserService {
                 .map(recipeService::mapToDto).collect(Collectors.toSet()));
         userDto.setCreatedRecipes(user.getCreatedRecipes().stream()
                 .map(recipeService::mapToDto).collect(Collectors.toSet()));
+        
+        userDto.setFollowerCount(user.getFollowers() != null ? user.getFollowers().size() : 0);
+        userDto.setFollowingCount(user.getFollowing() != null ? user.getFollowing().size() : 0);
+        
+        try {
+            String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+            if (currentUserEmail != null && !currentUserEmail.equals("anonymousUser")) {
+                userRepository.findByEmail(currentUserEmail).ifPresent(currentUser -> {
+                    userDto.setFollowedByCurrentUser(user.getFollowers() != null && user.getFollowers().contains(currentUser));
+                });
+            }
+        } catch (Exception e) {
+            // Ignore if no auth context
+        }
+        
         return userDto;
     }
 }

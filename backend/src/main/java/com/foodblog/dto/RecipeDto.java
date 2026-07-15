@@ -25,4 +25,6 @@ public class RecipeDto {
     private int favoriteCount;
     private String difficulty;
     private List<String> tags;
+    private Double averageRating;
+    private Integer reviewCount;
 }

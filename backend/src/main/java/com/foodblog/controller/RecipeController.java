@@ -17,6 +17,9 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
+    @Autowired
+    private com.foodblog.service.ReviewService reviewService;
+
     @GetMapping
     public ResponseEntity<Page<RecipeDto>> getAllRecipes(
             @RequestParam(required = false) String search,
@@ -43,5 +46,17 @@ public class RecipeController {
     public ResponseEntity<String> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
         return ResponseEntity.ok("Recipe deleted successfully");
+    }
+
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<java.util.List<com.foodblog.dto.ReviewDto>> getReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.getReviewsByRecipeId(id));
+    }
+
+    @PostMapping("/{id}/reviews")
+    public ResponseEntity<com.foodblog.dto.ReviewDto> addReview(
+            @PathVariable Long id,
+            @Valid @RequestBody com.foodblog.dto.ReviewDto reviewDto) {
+        return new ResponseEntity<>(reviewService.addReview(id, reviewDto), HttpStatus.CREATED);
     }
 }

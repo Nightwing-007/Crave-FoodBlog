@@ -12,4 +12,7 @@ public class UserDto {
     private Role role;
     private Set<RecipeDto> favoriteRecipes;
     private Set<RecipeDto> createdRecipes;
+    private int followerCount;
+    private int followingCount;
+    private boolean isFollowedByCurrentUser;
 }

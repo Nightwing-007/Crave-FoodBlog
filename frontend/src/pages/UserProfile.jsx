@@ -1,27 +1,62 @@
 import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
 import RecipeCard from '../components/RecipeCard';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
-const Dashboard = () => {
+const UserProfile = () => {
+  const { id } = useParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get('/users/profile');
+        const response = await api.get(`/users/${id}`);
         setProfile(response.data);
+        setIsFollowing(response.data.followedByCurrentUser);
+        setFollowerCount(response.data.followerCount);
       } catch (error) {
         console.error('Error fetching profile', error);
+        toast.error('User not found');
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
-  }, []);
+  }, [id]);
+
+  const handleFollowToggle = async () => {
+    if (!user) {
+      toast.error('Please login to follow users');
+      return;
+    }
+    
+    // Prevent self-follow via UI just in case
+    if (user.id === parseInt(id)) {
+      toast.error('You cannot follow yourself');
+      return;
+    }
+
+    try {
+      const res = await api.post(`/users/${id}/follow`);
+      if (res.data.includes('Unfollowed')) {
+        setIsFollowing(false);
+        setFollowerCount(prev => prev - 1);
+        toast.success(`Unfollowed ${profile.name}`);
+      } else {
+        setIsFollowing(true);
+        setFollowerCount(prev => prev + 1);
+        toast.success(`Followed ${profile.name}`);
+      }
+    } catch (error) {
+      toast.error('Failed to update follow status');
+    }
+  };
 
   if (loading) {
     return (
@@ -30,20 +65,23 @@ const Dashboard = () => {
           <div className="absolute top-0 left-0 w-full h-full border-4 border-orange-100 rounded-full"></div>
           <div className="absolute top-0 left-0 w-full h-full border-4 border-orange-500 rounded-full border-t-transparent animate-spin"></div>
         </div>
-        <p className="mt-6 text-gray-400 font-bold animate-pulse">Loading your kitchen...</p>
+        <p className="mt-6 text-gray-400 font-bold animate-pulse">Loading profile...</p>
       </div>
     );
   }
 
+  if (!profile) return <div className="text-center py-20 text-gray-500 font-bold">User not found.</div>;
+
+  const isCurrentUser = user && user.id === parseInt(id);
+
   return (
     <div className="space-y-16 pb-20">
-      {/* Profile Header */}
       <div className="glass rounded-[3rem] p-10 md:p-12 relative overflow-hidden transition-colors duration-300">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-orange-50 dark:bg-orange-900/10 rounded-full blur-3xl opacity-50"></div>
         
         <div className="relative flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-10 text-center md:text-left">
           <div className="h-32 w-32 bg-orange-500 rounded-[2.5rem] flex items-center justify-center text-5xl text-white font-black shadow-xl shadow-orange-200 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-            {profile.name[0]}
+            {profile.name[0].toUpperCase()}
           </div>
           <div className="flex-1 space-y-2">
             <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -52,7 +90,7 @@ const Dashboard = () => {
                 {profile.role}
               </span>
             </div>
-            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">{profile.email}</p>
+            
             <div className="flex items-center justify-center md:justify-start space-x-6 mt-4 pt-4 border-t border-gray-50 dark:border-gray-800">
               <div className="text-center md:text-left">
                 <span className="block text-2xl font-black text-gray-900 dark:text-white">{profile.createdRecipes?.length || 0}</span>
@@ -60,12 +98,7 @@ const Dashboard = () => {
               </div>
               <div className="w-px h-8 bg-gray-100 dark:bg-gray-800"></div>
               <div className="text-center md:text-left">
-                <span className="block text-2xl font-black text-gray-900 dark:text-white">{profile.favoriteRecipes?.length || 0}</span>
-                <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Favorites</span>
-              </div>
-              <div className="w-px h-8 bg-gray-100 dark:bg-gray-800"></div>
-              <div className="text-center md:text-left">
-                <span className="block text-2xl font-black text-gray-900 dark:text-white">{profile.followerCount || 0}</span>
+                <span className="block text-2xl font-black text-gray-900 dark:text-white">{followerCount}</span>
                 <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Followers</span>
               </div>
               <div className="w-px h-8 bg-gray-100 dark:bg-gray-800"></div>
@@ -75,21 +108,26 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <Link
-            to="/add-recipe"
-            className="bg-orange-500 text-white px-8 py-4 rounded-2xl font-black text-lg hover:bg-orange-600 shadow-xl shadow-orange-100 dark:shadow-orange-900/20 transition-all transform hover:-translate-y-1 active:scale-95"
-          >
-            Create New Recipe
-          </Link>
+
+          {!isCurrentUser && (
+            <button
+              onClick={handleFollowToggle}
+              className={`px-8 py-4 rounded-2xl font-black text-lg transition-all transform hover:-translate-y-1 active:scale-95 shadow-xl ${
+                isFollowing 
+                ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'
+                : 'bg-orange-500 text-white hover:bg-orange-600 shadow-orange-100 dark:shadow-orange-900/20'
+              }`}
+            >
+              {isFollowing ? 'Unfollow' : 'Follow'}
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Created Recipes */}
       <section>
         <div className="flex items-center justify-between mb-10">
           <div>
-            <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Your Kitchen</h2>
-            <p className="text-gray-500 dark:text-gray-400 font-medium mt-1">Recipes you've shared with the world</p>
+            <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">{profile.name}'s Recipes</h2>
           </div>
         </div>
         
@@ -102,36 +140,7 @@ const Dashboard = () => {
         ) : (
           <div className="text-center py-20 bg-gray-50 dark:bg-gray-900 rounded-[3rem] border-2 border-dashed border-gray-200 dark:border-gray-800">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white">No recipes yet</h3>
-            <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium">Start your culinary journey by sharing your first recipe!</p>
-            <Link to="/add-recipe" className="inline-block mt-6 text-orange-500 font-black hover:underline">
-              Get cooking →
-            </Link>
-          </div>
-        )}
-      </section>
-
-      {/* Favorite Recipes */}
-      <section>
-        <div className="flex items-center justify-between mb-10">
-          <div>
-            <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Saved Favorites</h2>
-            <p className="text-gray-500 dark:text-gray-400 font-medium mt-1">Your personal collection of taste</p>
-          </div>
-        </div>
-
-        {profile.favoriteRecipes?.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {profile.favoriteRecipes.map(recipe => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20 bg-gray-50 dark:bg-gray-900 rounded-[3rem] border-2 border-dashed border-gray-200 dark:border-gray-800">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-white">No favorites saved</h3>
-            <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium">Explore recipes and save the ones you love!</p>
-            <Link to="/" className="inline-block mt-6 text-orange-500 font-black hover:underline">
-              Explore recipes →
-            </Link>
+            <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium">{profile.name} hasn't shared any recipes.</p>
           </div>
         )}
       </section>
@@ -139,4 +148,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default UserProfile;

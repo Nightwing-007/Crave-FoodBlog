@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import ReviewSection from '../components/ReviewSection';
 
 const RecipeDetails = () => {
   const { id } = useParams();
@@ -78,6 +79,25 @@ const RecipeDetails = () => {
           </div>
           <div className="flex space-x-2">
             <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: recipe.title,
+                    text: `Check out this amazing recipe for ${recipe.title} on Crave Food Blog!`,
+                    url: window.location.href,
+                  }).catch((error) => console.log('Error sharing', error));
+                } else {
+                  toast.error('Sharing is not supported on this browser');
+                }
+              }}
+              className="bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 p-3 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/40 transition duration-200"
+              title="Share Recipe"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+            </button>
+            <button
               onClick={handleFavorite}
               className="bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 p-3 rounded-xl hover:bg-pink-100 dark:hover:bg-pink-900/40 transition duration-200"
               title="Add to Favorites"
@@ -146,6 +166,8 @@ const RecipeDetails = () => {
             />
           </div>
         </div>
+
+        <ReviewSection recipeId={recipe.id} />
       </div>
     </div>
   );

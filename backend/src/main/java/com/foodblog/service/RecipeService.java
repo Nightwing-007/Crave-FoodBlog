@@ -94,6 +94,9 @@ public class RecipeService {
                 .ingredients(recipe.getIngredients())
                 .difficulty(recipe.getDifficulty() != null ? recipe.getDifficulty().name() : null)
                 .tags(recipe.getTags())
+                .reviewCount(recipe.getReviews() != null ? recipe.getReviews().size() : 0)
+                .averageRating(recipe.getReviews() != null && !recipe.getReviews().isEmpty() ? 
+                        recipe.getReviews().stream().mapToInt(com.foodblog.entity.Review::getRating).average().orElse(0.0) : 0.0)
                 .build();
     }
 }

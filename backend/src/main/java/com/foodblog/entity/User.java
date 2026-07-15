@@ -51,4 +51,13 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "recipe_id")
     )
     private Set<Recipe> viewedRecipes = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_follows",
+            joinColumns = @JoinColumn(name = "follower_id"),
+            inverseJoinColumns = @JoinColumn(name = "following_id"))
+    private Set<User> following = new HashSet<>();
+
+    @ManyToMany(mappedBy = "following")
+    private Set<User> followers = new HashSet<>();
 }
