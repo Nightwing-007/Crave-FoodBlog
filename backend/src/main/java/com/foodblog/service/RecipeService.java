@@ -29,9 +29,9 @@ public class RecipeService {
     public Page<RecipeDto> getAllRecipes(String search, String category, Difficulty difficulty, String tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         
-        String finalCategory = (category != null && !category.isEmpty() && !category.equalsIgnoreCase("All")) ? category : null;
-        String finalSearch = (search != null && !search.isEmpty()) ? search : null;
-        String finalTag = (tag != null && !tag.isEmpty()) ? tag : null;
+        String finalCategory = (category != null && !category.isEmpty() && !category.equalsIgnoreCase("All")) ? category.toLowerCase() : null;
+        String finalSearch = (search != null && !search.isEmpty()) ? search.toLowerCase() : null;
+        String finalTag = (tag != null && !tag.isEmpty()) ? tag.toLowerCase() : null;
 
         Page<Recipe> recipes = recipeRepository.findRecipesWithFilters(finalSearch, finalCategory, difficulty, finalTag, pageable);
         return recipes.map(this::mapToDto);
