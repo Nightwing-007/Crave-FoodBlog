@@ -43,11 +43,15 @@
 - 🔍 **Search & Filter** — Real-time debounced search by title, filter by category (Breakfast, Lunch, Dinner, Dessert, Snack)
 - 📄 **Recipe Details** — Full recipe view with ingredients, step-by-step instructions, cooking time, and creator info
 - 📖 **Pagination** — "Load More" infinite-scroll style pagination
+- 👤 **User Profiles** — View public profiles of creators, their follower counts, and their created recipes
+- 📤 **Native Sharing** — Share recipes easily via the Web Share API (`navigator.share`)
 
 ### Authenticated Users
 - ✍️ **Create Recipes** — Rich form with live image preview, dynamic ingredient fields, and category selection
 - ❤️ **Favorites** — Toggle favorite on any recipe, view all saved favorites on your dashboard
-- 📊 **Dashboard** — Personal profile showing your created recipes, favorites count, and account info
+- ⭐ **Ratings & Reviews** — Rate recipes (1-5 stars) and leave comments to help the community
+- 👥 **Follow System** — Follow and unfollow your favorite recipe creators
+- 📊 **Dashboard** — Personal profile showing your created recipes, favorites, followers/following counts, and account info
 - 🗑️ **Delete Own Recipes** — Remove recipes you've created
 
 ### Admin
@@ -293,13 +297,17 @@ To **disable** seeding, remove `foodblog.seed=true` from `application-local.prop
 | `GET` | `/api/recipes/:id` | No | Get recipe by ID |
 | `POST` | `/api/recipes` | Yes | Create a new recipe |
 | `DELETE` | `/api/recipes/:id` | Yes | Delete recipe (owner or admin only) |
+| `GET` | `/api/recipes/:id/reviews` | No | List reviews for a recipe |
+| `POST` | `/api/recipes/:id/reviews` | Yes | Add a rating and review to a recipe |
 
 ### Users
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
 | `GET` | `/api/users/profile` | Yes | Get current user's profile with recipes & favorites |
+| `GET` | `/api/users/:userId` | No | Get public user profile with follower counts |
 | `POST` | `/api/users/:recipeId/favorite` | Yes | Toggle favorite on a recipe |
+| `POST` | `/api/users/:userId/follow` | Yes | Toggle follow on a user |
 
 ### Admin
 
