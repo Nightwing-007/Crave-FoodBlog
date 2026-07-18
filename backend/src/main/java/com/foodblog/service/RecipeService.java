@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class RecipeService {
     @Autowired
     private NutritionService nutritionService;
 
+    @Cacheable(value = "recipes", key = "#search + '-' + #category + '-' + #difficulty + '-' + #tag + '-' + #page + '-' + #size")
     @Transactional(readOnly = true)
     public Page<RecipeDto> getAllRecipes(String search, String category, Difficulty difficulty, String tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -49,6 +52,7 @@ public class RecipeService {
         return mapToDto(recipe);
     }
 
+    @CacheEvict(value = "recipes", allEntries = true)
     public RecipeDto createRecipe(RecipeDto recipeDto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email).get();
@@ -75,6 +79,7 @@ public class RecipeService {
         return mapToDto(savedRecipe);
     }
 
+    @CacheEvict(value = "recipes", allEntries = true)
     public void deleteRecipe(Long id) {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe not found with id: " + id));

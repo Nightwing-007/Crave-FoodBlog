@@ -70,6 +70,13 @@
 - ⚖️ **Yield Scaling** — Dynamically scale recipe ingredient quantities by adjusting the serving size
 - 📊 **Nutritional Facts** — Automatic macro-nutrient calculation (Calories, Protein, Carbs, Fats) for recipes
 
+### Infrastructure & Performance (Phase 4)
+- ⚡ **Backend Caching** — Spring `@Cacheable` in-memory cache on the recipe feed with automatic eviction on writes
+- 🧩 **Code Splitting** — Route-level `React.lazy()` + `Suspense` for on-demand page loading
+- 📦 **Optimized Bundles** — Vite manual chunks to split vendor libraries from app code
+- 🔐 **OAuth2 UI** — "Continue with Google" button on Login & Register (UI-ready for backend integration)
+- 🚀 **CI/CD Pipeline** — GitHub Actions workflow with parallel Java + Node.js build & test jobs
+
 ---
 
 ## Architecture

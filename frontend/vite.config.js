@@ -8,4 +8,15 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-})
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-utils': ['axios', 'react-hot-toast'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 500,
+  },
+})
