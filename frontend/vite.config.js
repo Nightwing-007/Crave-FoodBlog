@@ -11,9 +11,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-utils': ['axios', 'react-hot-toast'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react')) return 'vendor-react';
+            if (id.includes('axios') || id.includes('react-hot-toast')) return 'vendor-utils';
+            return 'vendor';
+          }
         },
       },
     },
