@@ -65,6 +65,11 @@
 - 📱 **Fully Responsive** — Mobile-first design with hamburger menu navigation
 - ✨ **Micro-animations** — Hover effects, scale transforms, and smooth transitions
 
+### Smart Features (Phase 3)
+- 🥕 **Pantry Search** — Reverse ingredient search to find recipes based on what you have in your fridge
+- ⚖️ **Yield Scaling** — Dynamically scale recipe ingredient quantities by adjusting the serving size
+- 📊 **Nutritional Facts** — Automatic macro-nutrient calculation (Calories, Protein, Carbs, Fats) for recipes
+
 ---
 
 ## Architecture
@@ -293,7 +298,8 @@ To **disable** seeding, remove `foodblog.seed=true` from `application-local.prop
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| `GET` | `/api/recipes?search=&category=&page=0&size=6` | No | List recipes (paginated, filterable) |
+| `GET` | `/api/recipes` | No | List recipes (paginated, filterable) |
+| `GET` | `/api/recipes/pantry?ingredients=tomato,onion` | No | Find recipes containing specific ingredients |
 | `GET` | `/api/recipes/:id` | No | Get recipe by ID |
 | `POST` | `/api/recipes` | Yes | Create a new recipe |
 | `DELETE` | `/api/recipes/:id` | Yes | Delete recipe (owner or admin only) |
@@ -424,6 +430,7 @@ docker run -p 8080:8080 \
 | `DB_USERNAME` | Prod only | — | Database username |
 | `DB_PASSWORD` | Prod only | — | Database password |
 | `JWT_SECRET` | No | Built-in default | Base64-encoded signing key |
+| `NUTRITION_API_KEY` | No | — | API key for third-party nutrition service (e.g., Spoonacular). Falls back to mock calculation if omitted. |
 
 ### Frontend
 

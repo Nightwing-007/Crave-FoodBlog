@@ -25,6 +25,11 @@ public class RecipeDto {
     private int favoriteCount;
     private String difficulty;
     private List<String> tags;
+    private Integer servings;
+    private Double calories;
+    private Double protein;
+    private Double carbs;
+    private Double fats;
     private Double averageRating;
     private Integer reviewCount;
 }

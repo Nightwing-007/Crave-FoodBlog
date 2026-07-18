@@ -26,6 +26,7 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 font-semibold transition-colors duration-200">Home</Link>
+            <Link to="/pantry" className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 font-semibold transition-colors duration-200">Pantry Search</Link>
             {user ? (
               <>
                 <Link to="/add-recipe" className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 font-semibold transition-colors duration-200">Add Recipe</Link>
@@ -112,6 +113,7 @@ const Navbar = () => {
           <div className="md:hidden pb-6 animate-fadeIn">
             <div className="flex flex-col space-y-4">
               <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-orange-500 font-semibold p-2">Home</Link>
+              <Link to="/pantry" className="text-gray-600 dark:text-gray-300 hover:text-orange-500 font-semibold p-2">Pantry Search</Link>
               {user ? (
                 <>
                   <Link to="/add-recipe" className="text-gray-600 dark:text-gray-300 hover:text-orange-500 font-semibold p-2">Add Recipe</Link>

@@ -8,6 +8,7 @@ import AddRecipe from './pages/AddRecipe';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import UserProfile from './pages/UserProfile';
+import PantrySearch from './pages/PantrySearch';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import { Toaster } from 'react-hot-toast';
@@ -25,6 +26,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/recipes/:id" element={<RecipeDetails />} />
             <Route path="/users/:id" element={<UserProfile />} />
+            <Route path="/pantry" element={<PantrySearch />} />
             
             <Route path="/add-recipe" element={
               <ProtectedRoute>

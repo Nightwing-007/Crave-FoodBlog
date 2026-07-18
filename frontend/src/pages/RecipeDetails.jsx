@@ -5,10 +5,34 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import ReviewSection from '../components/ReviewSection';
 
+const scaleIngredient = (ingredient, currentServings, baseServings) => {
+  if (currentServings === baseServings || !baseServings) return ingredient;
+  const match = ingredient.match(/^([\d\.\/]+)\s*(.*)/);
+  if (!match) return ingredient;
+  
+  let quantity = match[1];
+  let rest = match[2];
+  let num = 0;
+  
+  if (quantity.includes('/')) {
+    const [numStr, denStr] = quantity.split('/');
+    num = parseFloat(numStr) / parseFloat(denStr);
+  } else {
+    num = parseFloat(quantity);
+  }
+  
+  if (isNaN(num)) return ingredient;
+  
+  const scaled = (num * (currentServings / baseServings));
+  const formatted = Number.isInteger(scaled) ? scaled : scaled.toFixed(1);
+  return `${formatted} ${rest}`;
+};
+
 const RecipeDetails = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [servings, setServings] = useState(1);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -17,6 +41,7 @@ const RecipeDetails = () => {
       try {
         const response = await api.get(`/recipes/${id}`);
         setRecipe(response.data);
+        setServings(response.data.servings || 1);
       } catch (error) {
         toast.error('Failed to fetch recipe details');
         navigate('/');
@@ -131,7 +156,41 @@ const RecipeDetails = () => {
               <p className="font-bold text-gray-800 dark:text-gray-200">{recipe.ingredients.length} items</p>
             </div>
           </div>
+          <div className="flex items-center space-x-4 pl-4 border-l border-gray-200 dark:border-gray-700">
+            <div className="flex flex-col">
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase font-bold">Servings</p>
+              <div className="flex items-center space-x-3 mt-1">
+                <button onClick={() => setServings(s => Math.max(1, s - 1))} className="bg-gray-200 dark:bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-600 dark:text-gray-300 hover:bg-orange-100 hover:text-orange-600 transition">-</button>
+                <span className="font-bold text-lg text-gray-800 dark:text-white w-4 text-center">{servings}</span>
+                <button onClick={() => setServings(s => s + 1)} className="bg-gray-200 dark:bg-gray-700 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-600 dark:text-gray-300 hover:bg-orange-100 hover:text-orange-600 transition">+</button>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {recipe.calories !== null && recipe.calories !== undefined && (
+          <div className="mb-8 p-4 bg-orange-50 dark:bg-gray-800/50 rounded-2xl border border-orange-100 dark:border-gray-700">
+            <h3 className="text-sm font-bold text-gray-800 dark:text-white mb-3 uppercase">Nutritional Facts (Total)</h3>
+            <div className="grid grid-cols-4 gap-4 text-center">
+              <div>
+                <p className="text-xl font-extrabold text-orange-600 dark:text-orange-400">{Math.round(recipe.calories)}</p>
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Calories</p>
+              </div>
+              <div>
+                <p className="text-xl font-extrabold text-green-600 dark:text-green-400">{recipe.protein?.toFixed(1)}g</p>
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Protein</p>
+              </div>
+              <div>
+                <p className="text-xl font-extrabold text-blue-600 dark:text-blue-400">{recipe.carbs?.toFixed(1)}g</p>
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Carbs</p>
+              </div>
+              <div>
+                <p className="text-xl font-extrabold text-yellow-600 dark:text-yellow-400">{recipe.fats?.toFixed(1)}g</p>
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Fats</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {recipe.tags && recipe.tags.length > 0 && (
           <div className="mb-8">
@@ -153,7 +212,7 @@ const RecipeDetails = () => {
               {recipe.ingredients.map((ing, index) => (
                 <li key={index} className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
                   <span className="h-2 w-2 bg-orange-500 rounded-full"></span>
-                  <span>{ing}</span>
+                  <span>{scaleIngredient(ing, servings, recipe.servings || 1)}</span>
                 </li>
               ))}
             </ul>

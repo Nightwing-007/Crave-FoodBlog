@@ -21,4 +21,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             @org.springframework.data.repository.query.Param("difficulty") com.foodblog.entity.Difficulty difficulty, 
             @org.springframework.data.repository.query.Param("tag") String tag, 
             Pageable pageable);
+
+    @org.springframework.data.jpa.repository.Query("SELECT DISTINCT r FROM Recipe r JOIN r.ingredients i WHERE LOWER(i) IN :ingredients")
+    java.util.List<Recipe> findRecipesByIngredients(@org.springframework.data.repository.query.Param("ingredients") java.util.List<String> ingredients);
 }

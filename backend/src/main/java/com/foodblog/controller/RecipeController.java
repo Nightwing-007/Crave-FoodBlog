@@ -32,6 +32,11 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getAllRecipes(search, category, difficulty, tag, page, size));
     }
 
+    @GetMapping("/pantry")
+    public ResponseEntity<java.util.List<RecipeDto>> getPantryRecipes(@RequestParam java.util.List<String> ingredients) {
+        return ResponseEntity.ok(recipeService.getPantryRecipes(ingredients));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RecipeDto> getRecipeById(@PathVariable Long id) {
         return ResponseEntity.ok(recipeService.getRecipeById(id));

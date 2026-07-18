@@ -58,6 +58,21 @@ public class Recipe {
     @Column(name = "tag")
     private List<String> tags = new ArrayList<>();
 
+    @Column(name = "servings")
+    private Integer servings = 2;
+
+    @Column(name = "calories")
+    private Double calories;
+
+    @Column(name = "protein")
+    private Double protein;
+
+    @Column(name = "carbs")
+    private Double carbs;
+
+    @Column(name = "fats")
+    private Double fats;
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 }

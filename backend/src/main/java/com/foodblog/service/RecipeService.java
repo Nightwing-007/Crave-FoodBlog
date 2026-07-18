@@ -27,6 +27,9 @@ public class RecipeService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private NutritionService nutritionService;
+
     @Transactional(readOnly = true)
     public Page<RecipeDto> getAllRecipes(String search, String category, Difficulty difficulty, String tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -64,6 +67,9 @@ public class RecipeService {
         }
         recipe.setTags(recipeDto.getTags());
         recipe.setCreator(user);
+        
+        recipe.setServings(recipeDto.getServings() != null ? recipeDto.getServings() : 2);
+        nutritionService.calculateAndSetMacros(recipe);
 
         Recipe savedRecipe = recipeRepository.save(recipe);
         return mapToDto(savedRecipe);
@@ -83,6 +89,18 @@ public class RecipeService {
         recipeRepository.delete(recipe);
     }
 
+    @Transactional(readOnly = true)
+    public java.util.List<RecipeDto> getPantryRecipes(java.util.List<String> ingredients) {
+        if (ingredients == null || ingredients.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+        java.util.List<String> lowerCaseIngredients = ingredients.stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+        java.util.List<Recipe> recipes = recipeRepository.findRecipesByIngredients(lowerCaseIngredients);
+        return recipes.stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
     public RecipeDto mapToDto(Recipe recipe) {
         return RecipeDto.builder()
                 .id(recipe.getId())
@@ -97,6 +115,11 @@ public class RecipeService {
                 .ingredients(recipe.getIngredients())
                 .difficulty(recipe.getDifficulty() != null ? recipe.getDifficulty().name() : null)
                 .tags(recipe.getTags())
+                .servings(recipe.getServings())
+                .calories(recipe.getCalories())
+                .protein(recipe.getProtein())
+                .carbs(recipe.getCarbs())
+                .fats(recipe.getFats())
                 .reviewCount(recipe.getReviews() != null ? recipe.getReviews().size() : 0)
                 .averageRating(recipe.getReviews() != null && !recipe.getReviews().isEmpty() ? 
                         recipe.getReviews().stream().mapToInt(com.foodblog.entity.Review::getRating).average().orElse(0.0) : 0.0)
